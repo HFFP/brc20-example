@@ -13,4 +13,4 @@ artifacts
 .idea
 .vscode
 
-.config/local.ts
+config/local.ts
