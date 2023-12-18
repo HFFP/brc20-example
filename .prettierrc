@@ -1,0 +1,17 @@
+{
+  "plugins": [],
+  "printWidth": 120,
+  "overrides": [
+    {
+      "files": "*.ts",
+      "options": {
+        "semi": false,
+        "bracketSameLine": true,
+        "bracketSpacing": false,
+        "printWidth": 120,
+        "useTabs": false,
+        "tabWidth": 4
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "brc20-bitcoinjs-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:HFFP/brc20-bitcoinjs-example.git",
+  "author": "lonzo <lonzohffp@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@cmdcode/buff-utils": "^2.0.0",
+    "@cmdcode/crypto-utils": "^2.0.2",
+    "@cmdcode/tapscript": "^1.4.4",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "axios": "^1.6.2",
+    "bitcoinjs-lib": "^6.1.5",
+    "ecpair": "^2.1.0",
+    "eslint": "^8.55.0",
+    "eslint-config-standard-with-typescript": "^42.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^16.4.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "node": "^20.10.0",
+    "prettier": "^3.1.1",
+    "tiny-secp256k1": "^2.2.3",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.4",
+    "ts-node": "^10.9.2"
+  }
+}
