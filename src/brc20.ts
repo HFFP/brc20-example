@@ -14,12 +14,12 @@
 //     bitcoinJs.initEccLib(ecc)
 //
 //     // const network = bitcoinJs.networks.bitcoin
-//     // const pk = Buffer.from("fc7458de3d5616e7803fdc81d688b9642641be32fee74c4558ce680cac3d4111", "hex")
+//     // const pk = Buffer.from("", "hex")
 //     // const keypair = ecpair.default(ecc).fromPrivateKey(pk, {network: network})
 //     // await hello(keypair, network)
 //
 //     const network = bitcoinJs.networks.testnet
-//     const pk = Buffer.from("62316ccb087e9bfeaec5a12744163f6613470054a0ba503bc995bf98afb29e95", "hex")
+//     const pk = Buffer.from("", "hex")
 //     const keypair = ecpair.default(ecc).fromPrivateKey(pk)
 //     const myAddress = bitcoinJs.payments.p2tr({internalPubkey: keypair.publicKey.subarray(1, 33), network}).address!
 //     console.log(keypair.publicKey.toString("hex"))
