@@ -2,6 +2,7 @@ import {Tap, Address, Networks, Tx, Signer, TxData} from "@cmdcode/tapscript"
 import {keys} from "@cmdcode/crypto-utils"
 import {boardCast, createTextInscription, getAddress, getInscribeAddress, getUTXOList} from "./utils"
 import * as console from "console";
+import { pk } from "../config/local";
 
 interface UTXO {
     txId: string
@@ -10,7 +11,7 @@ interface UTXO {
 }
 
 async function main() {
-    const secret = "your private key"
+    const secret = pk
 
     // const address = "tb1pp3yynl27w4302ztw5hh84dwrk9jg0nw3t0dqexn0qky78jndgnvqrcgpms"
     // const utxos = await getUTXOList(address)
@@ -22,10 +23,10 @@ async function main() {
 
     const transferList = [
         {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 1},
-        {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 1},
-        {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 1},
-        {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 1},
-        {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 1},
+        {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 2},
+    //     {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 1},
+    //     {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 1},
+    //     {brc20: "hffp", toAddress: "tb1q7gnys2cwhkm7r73px6nus0g9dcr8mjh6fe2ums", amount: 1},
     ]
     await inscriptionTransfer(secret, transferList, "testnet")
 }
@@ -62,7 +63,7 @@ async function inscriptionMint(
     console.log(address, inscriptionAddress, "address")
 
     const feeRate = 2
-    const mintBaseUTXOAmount = 1000
+    const mintBaseUTXOAmount = 150 * feeRate + 546
     const inputs: UTXO[] = (await getUTXOList(address)).map((item) => {
         console.log(item)
         return {txId: item.txid, index: item.vout, amount: item.satoshi}
@@ -114,6 +115,7 @@ async function inscriptionMint(
         })
         const sig = Signer.taproot.sign(seckey, mintTx, 0, {extension: inscriptionTapleaf})
         mintTx.vin[0].witness = [sig, inscriptionScript, inscriptionCblock]
+        console.log(Tx.util.getTxSize(mintTx), '?')
         Signer.taproot.verify(mintTx, 0, {pubkey, throws: true})
         mintTxs.push(mintTx)
     }
@@ -154,7 +156,7 @@ async function inscriptionTransfer(
     })
 
     const feeRate = 2
-    const inscriptionBaseUTXOAmount = 2000
+    const inscriptionBaseUTXOAmount = (151 + 171) * feeRate + 546
     const inputs: UTXO[] = (await getUTXOList(address)).map((item) => {
         return {txId: item.txid, index: item.vout, amount: item.satoshi}
     })
@@ -183,7 +185,9 @@ async function inscriptionTransfer(
       inputs.map((item) => item.amount).reduce((pre, cur) => pre + cur) -
       inscriptionsInfo.length * inscriptionBaseUTXOAmount -
       splitTxFee
-    splitTx.vout.push({value: splitRecharge, scriptPubKey: Address.toScriptPubKey(address)})
+    if (splitRecharge > 546) {
+        splitTx.vout.push({value: splitRecharge, scriptPubKey: Address.toScriptPubKey(address)})
+    }
 
     inputs.forEach((item, index) => {
         const sig = Signer.taproot.sign(seckey, splitTx, index, {extension: tapleaf})
@@ -229,7 +233,6 @@ async function inscriptionTransfer(
             ],
             vout: [{value: 546, scriptPubKey: Address.toScriptPubKey(transferList[index].toAddress)}],
         })
-
         const sig = Signer.taproot.sign(seckey, tx, 0, {extension: tapleaf})
         tx.vin[0].witness = [sig, script, cblock]
         Signer.taproot.verify(tx, 0, {pubkey, throws: true})
